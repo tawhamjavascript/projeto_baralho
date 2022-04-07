@@ -1,0 +1,2 @@
+ if self.__head is None:
+            self.__end = newHead
