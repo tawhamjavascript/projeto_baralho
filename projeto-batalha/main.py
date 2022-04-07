@@ -15,8 +15,9 @@ for i in range(2):
 batalha: Batalha = Batalha(jogadores)
 
 print("Embaralhando baralho .")
-
+sleep(0.25)
 print("Embaralhando baralho ..")
+sleep(0.25)
 
 print("Embaralhando baralho ...")
 
@@ -26,6 +27,8 @@ while True:
         print("--------------------------------------------------")
         print(information)
         print("--------------------------------------------------")
+        sleep(1)
+
 
     except BaralhoVazio as error:
         print(error)
