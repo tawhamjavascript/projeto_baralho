@@ -1,2 +1,49 @@
  if self.__head is None:
             self.__end = newHead
+
+
+
+
+index_player = -1
+        has_draw = False
+        max_score = 0
+        message = ""
+        caracterOfVersus = " vs "
+
+        for i in range(self.number_of_cards_plays()):
+            if self.__cards[i].peso > max_score:
+                max_score = self.__cards[i].peso
+                index_player += 1
+
+            elif self.__cards[i].peso == max_score:
+                has_draw = True
+
+
+        if has_draw:
+            result = self.draw()
+            return result
+
+        else:
+            while len(self.__temporary_cards) > 0:
+                card = self.__temporary_cards.pop(0)
+                self.__players[index_player].stack_base(card)
+                message += str(card) + (caracterOfVersus if len(self.__temporary_cards) % 2 != 0 else " = empate\n")
+
+
+            while self.number_of_cards_plays() > 0:
+                card = self.__cards.pop(0)
+                self.__players[index_player].stack_base(card)
+
+                message += str(card) + (caracterOfVersus if self.number_of_cards_plays() % 2 != 0 else "")
+
+            message += " = vitória do " + str(self.__players[index_player])
+            return message
+
+def draw(self):
+        message = ""
+        for i in range(self.number_of_cards_plays()):
+            card = self.__cards.pop(0)
+            self.__temporary_cards.append(card)
+            message += str(card) + (" vs " if i % 2 == 0 else " = empate\n")
+
+        return message
