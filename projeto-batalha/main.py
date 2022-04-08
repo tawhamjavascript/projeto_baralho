@@ -61,10 +61,10 @@ while True:
             print("turno do", turn)
             print("p - puxar carta")
             print()
-            #option = input("Digite a opção: ")
+            option = input("Digite a opção: ")
             print()
 
-            if "p" == PUXARCARTA:
+            if option == PUXARCARTA:
                 card = batalha.play_card()
                 print("Carta: ", card)
                 count_of_plays += 1
