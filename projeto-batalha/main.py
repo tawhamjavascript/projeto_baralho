@@ -32,7 +32,7 @@ while True:
         print("--------------------------------------------------")
         print(information)
         print("--------------------------------------------------")
-        #sleep(1)
+        sleep(1)
 
 
     except BaralhoVazio as error:
@@ -58,17 +58,17 @@ while True:
         while count_of_plays < 2:
             turn = batalha.show_turn_player()
             print("turno do", turn)
-            print()
             print("p - puxar carta")
             print()
-            #option = input("Digite a opção: ")
+            option = input("Digite a opção: ")
             print()
 
-            if "p" == PUXARCARTA:
+            if option == PUXARCARTA:
                 card = batalha.play_card()
                 print("Carta: ", card)
                 count_of_plays += 1
                 print()
+                sleep(0.25)
 
             else:
                 print("Opção inválida, digite novamente!")
