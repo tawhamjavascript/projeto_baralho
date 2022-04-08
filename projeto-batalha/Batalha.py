@@ -16,8 +16,15 @@ class Batalha:
 
     def show_turn_player(self):
         # retorna o jogador que deve jogar nesse turno
-        index_player = self.__index_player % self.number_of_players()
-        return str(self.__players[index_player])
+        # se o número de rodadas for maior que 32, irá gerar uma exceção, e irá propagar outra exceção
+        try:
+            assert self.__numberOfRounds < 32
+            index_player = self.__index_player % self.number_of_players()
+            return str(self.__players[index_player])
+
+        except AssertionError:
+            raise RoundException(f"depois de {self.__numberOfRounds} rodadas {self.__player_win()}  ")
+
 
     def entregar_carta(self):
         # descobri qual jogador deve receber a carta
@@ -41,10 +48,8 @@ class Batalha:
         # guarda essa carta em uma lista
         # retorna uma string com as informações da carta
         # se o jogador não tiver mais cartar é levantada uma exceção e chamada a função player_win
-        # se já tiver completado as 32 rodadas é levantado uma exceção e chamada a função player_win
         player_turn = None
         try:
-            assert self.__numberOfRounds < 32
             player_turn = self.__index_player % self.number_of_players()
             card = self.__players[player_turn].unstack()
             self.__cards.append(card)
@@ -55,9 +60,6 @@ class Batalha:
         except PilhaException:
             raise DeckException(f"{self.__players[player_turn]} não possui mais cartas. Portando  {self.__player_win()}")
 
-        except AssertionError:
-            raise RoundException(f"depois de {self.__numberOfRounds} rodadas o {self.__player_win()}  ")
-
     def number_of_players(self): # retorna a quantidade de jogadores
         return len(self.__players)
 
@@ -67,10 +69,10 @@ class Batalha:
         # e retorna essa mensagem
         message = ""
         if self.__players[0].length_deck() > self.__players[1].length_deck():
-            message += f"O vencedor foi  {str(self.__players[0])}"
+            message += f"o vencedor foi  {str(self.__players[0])}"
 
         else:
-            message += f"O vencedor foi {str(self.__players[1])}"
+            message += f"o vencedor foi {str(self.__players[1])}"
 
         return message
 
