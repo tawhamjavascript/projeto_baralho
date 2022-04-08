@@ -43,8 +43,7 @@ while True:
 print()
 print()
 count_of_turn = 1 # contador de turnos
-print(f"\t\t\trodada {count_of_turn}")
-print("-" * 50)
+
 
 while True:
     # toda interação é pedido para o jogador jogar uma carta
@@ -57,13 +56,15 @@ while True:
     try:
         while count_of_plays < 2:
             turn = batalha.show_turn_player()
+            print(f"\t\t\trodada {count_of_turn}")
+            print("-" * 100)
             print("turno do", turn)
             print("p - puxar carta")
             print()
-            option = input("Digite a opção: ")
+            #option = input("Digite a opção: ")
             print()
 
-            if option == PUXARCARTA:
+            if "p" == PUXARCARTA:
                 card = batalha.play_card()
                 print("Carta: ", card)
                 count_of_plays += 1
@@ -84,8 +85,7 @@ while True:
     player_win_round = batalha.player_win_in_the_round()
     print(player_win_round)
 
-    print(f"\t\t\trodada { count_of_turn }")
-    print("-" * 100)
+
 
 
 
