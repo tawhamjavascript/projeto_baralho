@@ -69,7 +69,7 @@ while True:
                 print("Carta: ", card)
                 count_of_plays += 1
                 print()
-                sleep(0.25)
+                sleep(0.36)
 
             else:
                 print("Opção inválida, digite novamente!")
