@@ -19,7 +19,7 @@ class Jogador:
     def stack_up(self, value: Carta):
         # Verifica se o topo do deck é nullo
         # se não a nova carta vai apontar para o nulo
-        # vai ser atualizada a variável que aponta para a base do decl
+        # vai ser atualizada a variável que aponta para a base do deck
         # se for nulo a nova carta vai apontar para o topo atual
         # após essas checagens o topo será a nova carta recebida
         # e a quantidade de cartas é atualizada
@@ -35,11 +35,11 @@ class Jogador:
         self.__head = newHead
         self.__length += 1
 
-    def unstack(self): # retorna a carta do topo do deck
+    def unstack(self):  # retorna a carta do topo do deck
         # faz um if para verificar se o deck está vazio
         # se não estiver o novo topo do deck será a próxima carta do deck
         # A quantidade de carta é subtraída em - 1
-        # E é retornado o antigo topo
+        # é retornado o antigo topo
         # se o deck estiver vazio é levantado uma excessão do tipo pilha exception
         if not self.is_empty():
             oldHead = self.__head
@@ -53,14 +53,13 @@ class Jogador:
         # Quando a nova carta é recebida, a mesma é configurada para apontar para o null
         # é colocado que a base atual vai apontar a nova carta, atualizando assim a base
         # O tamanho do deck é incrementado
-
         newBase = value
         newBase.set_next_node(None)
         self.__base.set_next_node(newBase)
         self.__base = newBase
         self.__length += 1
 
-    def is_empty(self): # verifica se o topo do deck é vazio
+    def is_empty(self):  # verifica se o topo do deck é vazio
         return self.__head is None
 
     def elements_in_stack(self):
@@ -82,7 +81,7 @@ class Jogador:
         return string
 
     def elemento(self, posicao):
-        # Pecorre os nós até a posição informada seja igual a posição do nó correspondente
+        # Pecorre os nós até a posição informada seja igual à posição do nó correspondente
         # caso isso ocorra é retornado os dados do Nó
         # se a posição não for um inteiro é levantada uma exceção
         # se a posição informada não corresponder a nenhum nó é levantada uma exceção
@@ -110,7 +109,7 @@ class Jogador:
         cursor = self.__head
         count = 1
         while cursor is not None:
-            if cursor.dado == valor:
+            if str(cursor) == valor:
                 return count
 
             cursor = cursor.prox

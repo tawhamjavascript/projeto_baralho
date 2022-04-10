@@ -7,27 +7,26 @@ class BaralhoMontado:
     def __init__(self):
         self.__baralho = list()
         naipe = ["Ouro", "Espada", "Paus", "Copas"]  # salva os tipos de cartas
-        numeracao = ["As", "2", "3", "4", "5", "6", "7", "8", "9", "10", "valete", "dama", "rei"]  #guarda a numeração das cartas
+        numeracao = ["As", "2", "3", "4", "5", "6", "7", "8", "9", "10", "valete", "dama", "rei"]  # guarda a numeração das cartas
         weight = 1  # guarda o peso das cartas
 
-        for idx in range(len(naipe)): # responsável por montar o baralho e guardar o baralho na classe carta
+        for idx in range(len(naipe)):  # responsável por montar o baralho e guardar o baralho na classe carta
             for id in numeracao:
                 self.__baralho.append(Carta(naipe[idx], id, weight))
                 weight += 1
 
             weight = 1
 
-    def __len__(self): # retorna o tamanho do baralho
+    def __len__(self):  # retorna o tamanho do baralho
         return len(self.__baralho)
 
-    def temCarta(self): # verifica se o baralho tem carta ou não
+    def tem_carta(self):  # verifica se o baralho tem carta ou não
         if len(self.__baralho) > 0:
             return True
 
-        else:
-            return False
+        return False
 
-    def retirarCarta(self):
+    def retirar_carta(self):
         # Se o baralho tiver carta é chamado o método de array pop
         # se não tiver é levantado a excessão IndexError, propagando o erro BaralhoException
         try:

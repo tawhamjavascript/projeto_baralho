@@ -7,8 +7,8 @@ from RoundException import RoundException
 
 class Batalha:
     def __init__(self, jogadores):
-        self.__players = jogadores # variável que vai guardar o array de jogadores
-        self.__baralho = Baralho()  # criar uma instância objeto
+        self.__players = jogadores  # variável que vai guardar o array de jogadores
+        self.__baralho = Baralho()  # criar uma instância de objeto
         self.__cards = list()   # cria uma array que vai guarda as cartas jogadas pelo jogadores
         self.__numberOfRounds = 0   # guarda os números de rounds disputados
         self.__temporary_cards = list()    # se houve empate as cartas serão guardadas nesse array
@@ -25,7 +25,6 @@ class Batalha:
         except AssertionError:
             raise RoundException(f"depois de {self.__numberOfRounds} rodadas {self.__player_win()}  ")
 
-
     def entregar_carta(self):
         # descobri qual jogador deve receber a carta
         # retira a carta do baralhp
@@ -41,7 +40,7 @@ class Batalha:
             return message
 
         except PilhaException:
-            raise BaralhoVazio("O baralho já não possui mais cartas")
+            raise BaralhoVazio("O baralho não possui mais cartas")
 
     def play_card(self):
         # descobri qual jogador deve retirar a carta do seu baralho
@@ -58,13 +57,13 @@ class Batalha:
             return string
 
         except PilhaException:
-            raise DeckException(f"{self.__players[player_turn]} não possui mais cartas. Portando  {self.__player_win()}")
+            raise DeckException(f"{str(self.__players[player_turn])} não possui mais cartas. Portando {self.__player_win()}")
 
-    def number_of_players(self): # retorna a quantidade de jogadores
+    def number_of_players(self):  # retorna a quantidade de jogadores
         return len(self.__players)
 
     def __player_win(self):
-        # verifica qual jogador possui o maior número de cartas
+        # verifica qual jogador possui, o maior número de cartas
         # após isso monta uma mensagem informando qual jogador foi o vencedor
         # e retorna essa mensagem
         message = ""
@@ -96,7 +95,6 @@ class Batalha:
             player_win = self.__players[0]
 
         elif self.__cards[1] > self.__cards[0]:
-
             for i in range(self.number_of_cards_plays()):
                 card = self.__cards.pop(0)
                 string_of_victory += str(card) + (" vs " if i % 2 == 0 else " = ")
@@ -122,5 +120,5 @@ class Batalha:
 
         return message
 
-    def number_of_cards_plays(self): # retorna a quantidade de cartas
+    def number_of_cards_plays(self):  # retorna a quantidade de cartas
         return len(self.__cards)

@@ -6,15 +6,15 @@ class Carta:
         self.__nextNode = None  # guarda o próximo nó
 
     @property
-    def naipe(self): # retorna o nipe da carta
+    def naipe(self):  # retorna o nipe da carta
         return self.__naipe
 
     @property
-    def numero(self): # retorna a númeração da carta
+    def numero(self):  # retorna a númeração da carta
         return self.__number
 
     @property
-    def peso(self): # retorna o peso da carta
+    def peso(self):  # retorna o peso da carta
         return self.__weight
 
     def get_next_node(self):  # retorna o próximo Nó
@@ -23,7 +23,7 @@ class Carta:
     def set_next_node(self, next_node):  # configura o nó atual, para apontar para o próximo Nó
         self.__nextNode = next_node
 
-    def has_next(self): # verifica se o nó aponta para o nullo
+    def has_next(self):  # verifica se o nó aponta para o nullo
         return self.__nextNode is not None
 
     def __str__(self):  # todas as informacoes da carta
@@ -37,8 +37,7 @@ class Carta:
         return False
 
     def __gt__(self, other_object: 'Carta'):
-        # método especial de python responsável por verificar se um objeto é maior do que o outro
-
+        # método especial de python responsável por verificar se um objeto é maior que o outro
         if self.peso > other_object.peso:
             return True
 

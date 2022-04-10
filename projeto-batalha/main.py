@@ -42,7 +42,7 @@ while True:
         
 print()
 print()
-count_of_turn = 1 # contador de turnos
+count_of_turn = 0  # contador de turnos
 
 
 while True:

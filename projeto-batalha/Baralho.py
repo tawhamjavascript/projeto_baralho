@@ -7,13 +7,13 @@ class Baralho:
         self.__head = None  # guarda o topo da pilha
         self.__length = 0   # indica o tamanho da pilha
         self.__baralhoMontado = BaralhoMontado()  # cria uma instância de um objeto
-        self.__baralhoMontado.embaralhar() # chama o método embaralhar do objeto
+        self.__baralhoMontado.embaralhar()  # chama o método embaralhar do objeto
 
-        while self.__baralhoMontado.temCarta():
+        while self.__baralhoMontado.tem_carta():
             # A cara interação é verificado se tem carta
             # se tiver é retirado a carta e chamada a função stack_up
             # se não tiver mais cartas a interação é parada
-            card = self.__baralhoMontado.retirarCarta()
+            card = self.__baralhoMontado.retirar_carta()
             self.stack_up(card)
 
     def stack_up(self, card):
@@ -38,10 +38,10 @@ class Baralho:
 
         raise PilhaException('A pilha está vazia')
 
-    def __len__(self) -> int: # retorna o tamanho do baralho
+    def __len__(self) -> int:  # retorna o tamanho do baralho
         return self.__length
 
-    def element_of_stack(self): # retorna os dados fornecidos pelo método __str__
+    def element_of_stack(self):  # retorna os dados fornecidos pelo método __str__
         return self.__str__()
 
     def find_value(self, value):
