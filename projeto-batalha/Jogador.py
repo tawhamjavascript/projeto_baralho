@@ -49,6 +49,11 @@ class Jogador:
 
         raise PilhaException("Pilha está vazia")
 
+    def reset_stack(self):  # Responsável por zerar o deck do utilizador
+        self.__head = None
+        self.__base = None
+        self.__length = 0
+
     def stack_base(self, value: Carta):  # atualiza a base do deck com a carta recebida
         # Quando a nova carta é recebida, a mesma é configurada para apontar para o null
         # é colocado que a base atual vai apontar a nova carta, atualizando assim a base

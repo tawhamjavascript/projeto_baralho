@@ -122,3 +122,8 @@ class Batalha:
 
     def number_of_cards_plays(self):  # retorna a quantidade de cartas
         return len(self.__cards)
+
+    def reset_game(self):
+        for i in range(self.number_of_players()):
+            self.__players[i].reset_stack()
+
