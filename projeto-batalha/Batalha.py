@@ -36,7 +36,7 @@ class Batalha:
             card = self.__baralho.unstack()
             self.__players[player_turn].stack_up(card)
             self.__index_player += 1
-            message = f"O jogador {self.__players[player_turn].nome} recebeu a carta {str(card)}"
+            message = f"O jogador {self.__players[player_turn].nome} recebeu a carta {str(card)}, e possui {self.__players[player_turn].length_deck()} cartas"
             return message
 
         except PilhaException:

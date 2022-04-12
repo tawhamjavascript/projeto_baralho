@@ -5,11 +5,12 @@ from time import sleep
 from DeckException import DeckException
 from RoundException import RoundException
 
+
 players: list[Jogador] = list()  # uma lista de jogadores
 PUXARCARTA = "p"
 KEEPPLAYING = "S"
 ENDGAME = "N"
-continuePlaying = True # Variável que indica se o jogo vai continuar ou encerrar
+continuePlaying = True  # Variável que indica se o jogo vai continuar ou encerrar
 
 for i in range(2):
     # fazendo duas iterações perguntando o nome do utilizador
