@@ -1,26 +1,28 @@
 from Baralho import Baralho
-from PilhaException import PilhaException
-from BaralhoVazioException import BaralhoVazio
-from DeckException import DeckException
 from RoundException import RoundException
+from BaralhoException import BaralhoException
 
 
 class Batalha:
     def __init__(self, jogadores):
         self.__players = jogadores  # variável que vai guardar o array de jogadores
-        self.__baralho = Baralho()  # criar uma instância de objeto
+        self.__baralho = Baralho(False)  # criar uma instância de objeto
         self.__cards = list()   # cria uma array que vai guarda as cartas jogadas pelo jogadores
-        self.__numberOfRounds = 0   # guarda os números de rounds disputados
+        self.__numberOfRounds = 0  # guarda os números de rounds disputados
         self.__temporary_cards = list()    # se houve empate as cartas serão guardadas nesse array
         self.__index_player = 0     # variavel que vai auxiliar na descoberta do turno do jogador
+        self.__histoty_of_draw = list()  # array que contém os históricos de empate
 
-    def show_turn_player(self):
-        # retorna o jogador que deve jogar nesse turno
+    def length_baralho(self):  # retorna o tamanho do baralho
+        return len(self.__baralho)
+
+    def show_rounds(self):
+        # retorna a rodada em que o jogo esta
         # se o número de rodadas for maior que 32, irá gerar uma exceção, e irá propagar outra exceção
         try:
-            assert self.__numberOfRounds < 32
-            index_player = self.__index_player % self.number_of_players()
-            return str(self.__players[index_player])
+            assert self.__numberOfRounds < 33
+            self.__numberOfRounds += 1
+            return self.__numberOfRounds
 
         except AssertionError:
             raise RoundException(f"depois de {self.__numberOfRounds} rodadas {self.__player_win()}  ")
@@ -29,35 +31,30 @@ class Batalha:
         # descobri qual jogador deve receber a carta
         # retira a carta do baralhp
         # entrega a carta para o jogador definido pela fórmula
-        # e retorna as informações do jogador
         # se não tiver mais cartas no baralho é levantado uma exceção
         try:
             player_turn = self.__index_player % self.number_of_players()
-            card = self.__baralho.unstack()
-            self.__players[player_turn].stack_up(card)
+            card = self.__baralho.draw_card()
+            self.__players[player_turn].add_card_in_the_head(card)
             self.__index_player += 1
-            message = f"O jogador {self.__players[player_turn].nome} recebeu a carta {str(card)}, e possui {self.__players[player_turn].length_deck()} cartas"
-            return message
 
-        except PilhaException:
-            raise BaralhoVazio("O baralho não possui mais cartas")
+        except BaralhoException:
+            raise BaralhoException("Não possui mais cartas")
 
     def play_card(self):
-        # descobri qual jogador deve retirar a carta do seu baralho
+        # faz um for para cada jogador poder jogar a carta
         # guarda essa carta em uma lista
-        # retorna uma string com as informações da carta
+        # cria uma variável index que só é usada quando o jogador fica sem cartas
         # se o jogador não tiver mais cartar é levantada uma exceção e chamada a função player_win
-        player_turn = None
+        index = 0
         try:
-            player_turn = self.__index_player % self.number_of_players()
-            card = self.__players[player_turn].unstack()
-            self.__cards.append(card)
-            string = str(card)
-            self.__index_player += 1
-            return string
+            for player in self.__players:
+                card = player.play_card()
+                self.__cards.append(card)
+                index += 1
 
-        except PilhaException:
-            raise DeckException(f"{str(self.__players[player_turn])} não possui mais cartas. Portando {self.__player_win()}")
+        except BaralhoException:
+            raise BaralhoException(f"O jogador {self.__players[index].nome} não possui mais cartas. Portando {self.__player_win()}")
 
     def number_of_players(self):  # retorna a quantidade de jogadores
         return len(self.__players)
@@ -67,11 +64,11 @@ class Batalha:
         # após isso monta uma mensagem informando qual jogador foi o vencedor
         # e retorna essa mensagem
         message = ""
-        if self.__players[0].length_deck() > self.__players[1].length_deck():
-            message += f"o vencedor foi  {str(self.__players[0])}"
+        if len(self.__players[0]) > len(self.__players[1]):
+            message += f"o vencedor foi o {str(self.__players[0])}"
 
         else:
-            message += f"o vencedor foi {str(self.__players[1])}"
+            message += f"o vencedor foi o {str(self.__players[1])}"
 
         return message
 
@@ -82,48 +79,53 @@ class Batalha:
         # se der empate é montado uma mensagem de empate
         # guarda as cartas em uma lista de cartas temporárias
         # e retorna uma string informando o empate
-
+        # Guarda a string em questão de empate até que haja um desempate
         player_win = None
-        string_of_draw = ""
-        string_of_victory = ""
+        string_general = ""
+        history_of_draw = ""
+
         if self.__cards[0] > self.__cards[1]:
+            string_general = f"({len(self.__players[0])} cartas) {self.__players[0].nome} {self.__cards[0]}"
+            string_general += f" vs {self.__cards[1]} {self.__players[1].nome} ({len(self.__players[1])} cartas) = "
             for i in range(self.number_of_cards_plays()):
                 card = self.__cards.pop(0)
-                string_of_victory += str(card) + (" vs " if i % 2 == 0 else " = ")
-                self.__players[0].stack_base(card)
+                self.__players[0].add_card_in_the_base(card)
 
             player_win = self.__players[0]
 
         elif self.__cards[1] > self.__cards[0]:
+            string_general = f"({len(self.__players[0])} cartas) {self.__players[0].nome} {self.__cards[0]}"
+            string_general += f" vs {self.__cards[1]} {self.__players[1].nome} ({len(self.__players[1])} cartas) = "
             for i in range(self.number_of_cards_plays()):
                 card = self.__cards.pop(0)
-                string_of_victory += str(card) + (" vs " if i % 2 == 0 else " = ")
-                self.__players[1].stack_base(card)
+
+                self.__players[1].add_card_in_the_base(card)
 
             player_win = self.__players[1]
 
         else:
-            string_of_draw = "Ocorreu um empate. \n"
+            string_general += f"({len(self.__players[0])} cartas) {self.__players[0].nome} {self.__cards[0]}"
+            string_general += f" vs {self.__cards[1]} {self.__players[1].nome} ({len(self.__players[1])} cartas) = empate\n"
+            self.__histoty_of_draw.append(string_general)
             for i in range(self.number_of_cards_plays()):
                 card = self.__cards.pop(0)
-                string_of_draw += ("\t --> " if i % 2 == 0 else "") + str(card) + (" vs " if i % 2 == 0 else " = empate\n")
                 self.__temporary_cards.append(card)
 
         if len(self.__temporary_cards) > 0 and player_win is not None:
             for i in range(len(self.__temporary_cards)):
                 card = self.__temporary_cards.pop(0)
-                player_win.stack_base(card)
-                string_of_draw += str(card) + (" vs " if i % 2 == 0 else " = empate\n")
+                player_win.add_card_in_the_base(card)
 
-        message = string_of_draw + string_of_victory + ("O vencedor foi " + str(player_win) if player_win else "\n")
-        self.__numberOfRounds += 1
+            history_of_draw = "".join(self.__histoty_of_draw)
+            self.__histoty_of_draw.clear()
 
+        message = history_of_draw+string_general+(f" o vencedor foi {player_win}" if player_win is not None else "")
         return message
 
     def number_of_cards_plays(self):  # retorna a quantidade de cartas
         return len(self.__cards)
 
-    def reset_game(self):
+    def reset_game(self):   # reseta o deck dos jogadores
         for i in range(self.number_of_players()):
-            self.__players[i].reset_stack()
+            self.__players[i].reset_deck()
 

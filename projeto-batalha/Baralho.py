@@ -1,102 +1,55 @@
 from PilhaException import PilhaException
-from BaralhoMontado import BaralhoMontado
+from pilhaEncadeada import Pilha
+from Carta import Carta
+from random import shuffle
+from BaralhoException import BaralhoException
 
 
 class Baralho:
-    def __init__(self):
-        self.__head = None  # guarda o topo da pilha
-        self.__length = 0   # indica o tamanho da pilha
-        self.__baralhoMontado = BaralhoMontado()  # cria uma instância de um objeto
-        self.__baralhoMontado.embaralhar()  # chama o método embaralhar do objeto
+    def __init__(self, jogador: bool):
+        self.__baralho = Pilha()  # cria um objeto pilha
+        if not jogador:  # verifica se o baralho é do jogador se não é criado o baralho automaticamente
+            self.__criar_baralho()
 
-        while self.__baralhoMontado.tem_carta():
-            # A cara interação é verificado se tem carta
-            # se tiver é retirado a carta e chamada a função stack_up
-            # se não tiver mais cartas a interação é parada
-            card = self.__baralhoMontado.retirar_carta()
-            self.stack_up(card)
+    def add_card(self, card: Carta) -> None:    # adiciona uma carta ao baralho
+        self.__baralho.stack_up(card)
 
-    def stack_up(self, card):
-        # topo será atualizado para a nova carta recebida
-        # e a quantidade de cartas é atualizada
-        newHead = card
-        newHead.set_next_node(self.__head)
-        self.__head = newHead
-        self.__length += 1
+    def add_card_base(self, card: Carta) -> None:   # adiciona uma carta na base do baralho
+        self.__baralho.stack_base(card)
 
-    def unstack(self):
-        # faz um if para verificar se o deck está vazio
-        # se não estiver o novo topo do deck será a próxima carta do deck
-        # A quantidade de carta é subtraída em - 1
-        # E é retornado o antigo topo
-        # se o deck estiver vazio é levantado uma excessão do tipo pilha exception
-        if not self.is_empty():
-            data = self.__head
-            self.__head = self.__head.get_next_node()
-            self.__length -= 1
-            return data
-
-        raise PilhaException('A pilha está vazia')
-
-    def __len__(self) -> int:  # retorna o tamanho do baralho
-        return self.__length
-
-    def element_of_stack(self):  # retorna os dados fornecidos pelo método __str__
-        return self.__str__()
-
-    def find_value(self, value):
-        # pecorre os nós até que o valor informado seja igual aos dados de um nó
-        # quando isso ocorre é retornado a posição do nó
-        # caso não exista esse valor nos Nós é levantada uma excessão
-        node = self.__head
-        count = 1
-        while node is not None:
-            if str(node) == value:
-                return count
-
-            node = node.get_next_node()
-            count += 1
-
-        raise PilhaException(f'Valor {value} não esta na pilha', 'busca()')
-
-    def position_of_element(self, position):
-        # Pecorre os nós até a posição informada seja igual a posição do nó correspondente
-        # caso isso ocorra é retornado os dados do Nó
-        # se a posição não for um inteiro é levantada uma exceção
-        # se a posição informada não corresponder a nenhum nó é levantada uma exceção
+    def draw_card(self) -> Carta:   # Pegar uma carta do baralho
         try:
-            assert 0 < position <= self.__length
-            node = self.__head
-            count = 1
-            while node is not None and count < position:
-                count += 1
-                node = node.get_next_node()
+            card = self.__baralho.unstack()
+            return card
 
-            return str(node)
+        except PilhaException:
+            raise BaralhoException("O baralho não possui mais cartas")
 
-        except TypeError:
-            raise PilhaException('Digite um número inteiro referente ao elemento desejado')
-        except AssertionError:
-            raise PilhaException(f'O elemento {position} NAO existe na pilha de tamanho {self.__length}')
-        except:
-            raise
+    def reset_baralho(self) -> None:    # resetar o baralho
+        self.__baralho.reset_stack()
 
-    def is_empty(self) -> bool:  # verifica se o topo do baralho está vazio
-        return self.__head is None
+    def is_empty(self) -> bool:     # verifica se está vazio
+        return self.__baralho.is_empty()
 
-    def __str__(self):  # Pecorre todos os nós do baralho exibindo os seus determinados valores
-        node = self.__head
-        first = True
-        string = "topo --> ["
-        while node is not None:
-            if first:
-                string += f"{str(node)}"
-                first = False
+    def __len__(self) -> int:   # retorna o tamanho do baralho
+        return self.__baralho.length_deck()
 
-            else:
-                string += f", {str(node)}"
+    def __str__(self) -> str:   # retorna uma string com todos os elementos do baralho
+        return self.__baralho.elements_in_stack()
 
-            node = node.get_next_node()
+    def __criar_baralho(self):  # monta o baralho automaticamente
+        self.reset_baralho()
+        naipe = ["Ouro", "Espada", "Paus", "Copas"]  # salva os tipos de cartas
+        numeracao = ["As", "2", "3", "4", "5", "6", "7", "8", "9", "10", "valete", "dama", "rei"]  # guarda a numeração das cartas
+        weight = 1  # guarda o peso das cartas
+        baralho = list()
+        for idx in range(len(naipe)):  # responsável por montar o baralho e guardar o baralho na classe carta
+            for id in numeracao:
+                baralho.append(Carta(naipe[idx], id, weight))
+                weight += 1
 
-        string += "]"
-        return string
+            weight = 1
+
+        shuffle(baralho)    # embaralha o baralho
+        for card in baralho:
+            self.add_card(card)
