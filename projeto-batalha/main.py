@@ -12,16 +12,27 @@ CONTINUAR = ""
 continuePlaying = True  # Variável que indica se o jogo vai continuar ou encerrar
 
 for i in range(2):
-    # fazendo duas iterações perguntando o nome do utilizador
-    # e adicionando a lista de jogadores
-    name = input(f"Digite o nome do jogador { i + 1 }: ")
-    players.append(Jogador(name))
-    print(f"Bem vindo ao jogo { name } ")
+    """ 
+        A cada interação é solicitado o nome do usuário
+        é criado um objeto da classe jogador 
+        passa o nome como argumento do objeto
+        é mostrado uma mensagem de bem vindo ao jogador
+        se o usuário informar um nome inválido é solicitador a digitação do nome novamente
+        
+    """
+    while True:
+        name = input(f"Digite o nome do jogador { i + 1 }: ")
+        if name:
+            players.append(Jogador(name))
+            print(f"Bem vindo ao jogo { name } ")
+            break
+
+        print("Nome inválido digite novamente")
 
 
 def game():
     print()
-    batalha: Batalha = Batalha(players)
+    batalha: Batalha = Batalha(players)  # cria um objeto da classe batalha
     print(f"O baralho possui { batalha.length_baralho() } cartas")
     print("Embaralhando baralho .")
     sleep(0.30)  # colocando o código para dormir por 0,25 segundos
@@ -35,8 +46,12 @@ def game():
     print("entregando às cartas...")
 
     while True:
-        # toda a interação é entregue uma carta ao jogador
-        # caso o baralho esteja vazio é levantado uma excessão
+        """ 
+            toda a interação é entregue uma carta ao jogador
+            caso o baralho esteja vazio é levantado uma excessão
+            informa quantas cartas cada jogador possui
+            
+        """
 
         try:
             batalha.entregar_carta()
@@ -45,17 +60,21 @@ def game():
             break
 
     print()
-    print(f"O { players[0] }")  # informar ao jogador quantas cartas ele possui depois da distribuição das cartas
+    print(f"O { players[0] }")
     print(f"O { players[1] }")
     print()
 
     while True:
-        # toda a interação os jogadores jogam uma carta
-        # até que haja um vencedor
-        # quando o jogador não possui mais cartas é lançado uma excessão
-        # quando se passaram muitas rodadas é lançado uma excessão
-        # ambas as exceções informam o jogador vencedor e o deck é recetado
-        # quando a rodada está terminada é pedido para o usuário aperta a tecla enter para continuar
+        """
+         toda a interação os jogadores jogam uma carta
+         verifica quem foi o ganhador da rodada
+         até que haja um vencedor da partida
+         quando o jogador não possui mais cartas é lançado uma excessão
+         quando se passaram muitas rodadas é lançado uma excessão
+         ambas as exceções informam o jogador vencedor e o deck é recetado
+         quando a rodada está terminada é pedido para o usuário aperta a tecla enter para continuar
+         caso o jogador informe uma opção inexistente é solicitado novamente a submissão da opção
+        """
 
         try:
             print(f"\t\t\t{batalha.show_rounds()} rodadas")
@@ -88,6 +107,14 @@ def game():
 
 
 while continuePlaying:
+    """
+        Em toda itenração vai ser chamado a função game
+        solicitado ao usuário se ele quer continuar ou não
+        se a resposta for sim o código é rodado novamente
+        se não o jogo termina
+        se o usuário informar uma opção inválida é solicitado novamente para ele digitar a opção
+    
+    """
     game()  # chama a função para rodar o jogo
     while True:
         # Pergunta ao usuário se o jogo deve continuar ou não

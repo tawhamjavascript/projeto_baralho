@@ -16,9 +16,16 @@ class Batalha:
     def length_baralho(self):  # retorna o tamanho do baralho
         return len(self.__baralho)
 
-    def show_rounds(self):
-        # retorna a rodada em que o jogo esta
-        # se o número de rodadas for maior que 32, irá gerar uma exceção, e irá propagar outra exceção
+    def show_rounds(self) -> int:
+        """
+            A cada chamada do método o número de rodadas é somado mais 1
+            é checado se o número de rodadas é menor que um valor determinado
+            se for maior é levantado uma excessão do tipo assert
+            sendo transmitida uma excessão do tipo RoundException
+
+            return: um inteiro representando o número de rodadas
+        """
+
         try:
             assert self.__numberOfRounds < 33
             self.__numberOfRounds += 1
@@ -27,7 +34,18 @@ class Batalha:
         except AssertionError:
             raise RoundException(f"depois de {self.__numberOfRounds} rodadas {self.__player_win()}  ")
 
-    def entregar_carta(self):
+    def entregar_carta(self) -> None:
+        """
+            É descoberto o jogador que vai receber a carta pela formula de lista circular
+            é retirada uma carta do baralho
+            entrega a carta ao jogador determinado
+            e o index é somado mais um
+            caso o baralho não possua mais cartas é levantada uma excessão do tipi BaralhoException
+            esse erro é tratado dando um raise de um erro BaralhoException
+
+
+
+        """
         # descobri qual jogador deve receber a carta
         # retira a carta do baralhp
         # entrega a carta para o jogador definido pela fórmula
@@ -42,10 +60,13 @@ class Batalha:
             raise BaralhoException("Não possui mais cartas")
 
     def play_card(self):
-        # faz um for para cada jogador poder jogar a carta
-        # guarda essa carta em uma lista
-        # cria uma variável index que só é usada quando o jogador fica sem cartas
-        # se o jogador não tiver mais cartar é levantada uma exceção e chamada a função player_win
+        """
+            faz um for para cada jogador poder jogar a carta
+            guarda essa carta em uma lista
+            cria uma variável index que só é usada quando o jogador fica sem cartas
+            se o jogador não tiver mais cartar é levantada uma exceção e chamada a função player_win
+
+        """
         index = 0
         try:
             for player in self.__players:
@@ -59,34 +80,39 @@ class Batalha:
     def number_of_players(self):  # retorna a quantidade de jogadores
         return len(self.__players)
 
-    def __player_win(self):
-        # verifica qual jogador possui, o maior número de cartas
-        # após isso monta uma mensagem informando qual jogador foi o vencedor
-        # e retorna essa mensagem
-        message = ""
+    def __player_win(self) -> str:
+        """
+            verifica qual jogador possui, o maior número de cartas
+            após isso monta uma mensagem informando qual jogador foi o vencedor
+            e retorna essa mensagem
+
+        """
         if len(self.__players[0]) > len(self.__players[1]):
-            message += f"o vencedor foi o {str(self.__players[0])}"
+            return f"o vencedor foi o {str(self.__players[0])}"
 
-        else:
-            message += f"o vencedor foi o {str(self.__players[1])}"
-
-        return message
+        return f"o vencedor foi o {str(self.__players[1])}"
 
     def player_win_in_the_round(self) -> str:
-        # verifica qual jogador ganhou a rodads
-        # entrega as cartas apropriadamente
-        # e retorna uma string informando o jogador vencedor
-        # se der empate é montado uma mensagem de empate
-        # guarda as cartas em uma lista de cartas temporárias
-        # e retorna uma string informando o empate
-        # Guarda a string em questão de empate até que haja um desempate
+        """
+        Verifica qual jogador ganhou a rodads
+        entrega as cartas apropriadamente
+        e retorna uma string informando o jogador vencedor
+        se der empate é montado uma mensagem de empate
+        guarda as cartas em uma lista de cartas temporárias
+        a mensagem de empate é guardada numa lista
+        e retorna uma string informando o empate
+        caso na rodada anterior houve um empate é retornado uma string com o histórico de empates
+        e o ganhador da rodada.
+
+        """
+
         player_win = None
         string_general = ""
         history_of_draw = ""
 
         if self.__cards[0] > self.__cards[1]:
             string_general = f"({len(self.__players[0])} cartas) {self.__players[0].nome} {self.__cards[0]}"
-            string_general += f" vs {self.__cards[1]} {self.__players[1].nome} ({len(self.__players[1])} cartas) = "
+            string_general += f" vs {self.__cards[1]} {self.__players[1].nome} ({len(self.__players[1])} cartas)\n"
             for i in range(self.number_of_cards_plays()):
                 card = self.__cards.pop(0)
                 self.__players[0].add_card_in_the_base(card)
@@ -95,7 +121,7 @@ class Batalha:
 
         elif self.__cards[1] > self.__cards[0]:
             string_general = f"({len(self.__players[0])} cartas) {self.__players[0].nome} {self.__cards[0]}"
-            string_general += f" vs {self.__cards[1]} {self.__players[1].nome} ({len(self.__players[1])} cartas) = "
+            string_general += f" vs {self.__cards[1]} {self.__players[1].nome} ({len(self.__players[1])} cartas)\n"
             for i in range(self.number_of_cards_plays()):
                 card = self.__cards.pop(0)
 

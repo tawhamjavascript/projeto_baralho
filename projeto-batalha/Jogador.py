@@ -9,13 +9,19 @@ class Jogador:
         self.__deck = Baralho(True)  # criar um objeto com o parâmetro true informando que é um jogador
 
     @property
-    def nome(self):  # retorna o nome do jogador
+    def nome(self) -> str:  # retorna o nome do jogador
         return self.__name
 
     def add_card_in_the_head(self, card: Carta) -> None:  # adicionar carta no deck
         self.__deck.add_card(card)
 
-    def play_card(self) -> Carta:   # retira uma carta do deck
+    def play_card(self) -> Carta:
+        """"
+            retira uma carta do deck do jogador
+            e retorna essa carta
+            se o jogador não possuir mais cartas é levantada uma excessão Baralho exception
+            e esse erro é tratando dando um raise na excessão baralho exception
+        """
         try:
             card = self.__deck.draw_card()
             return card
@@ -23,7 +29,7 @@ class Jogador:
         except BaralhoException:
             raise BaralhoException("O baralho não possui mais cartas")
 
-    def add_card_in_the_base(self, card: Carta) -> None:    # adiciona uma carta na base do deck
+    def add_card_in_the_base(self, card: Carta) -> None:   # adiciona uma carta na base do deck
         self.__deck.add_card_base(card)
 
     def reset_deck(self):   # esvazia o deck
